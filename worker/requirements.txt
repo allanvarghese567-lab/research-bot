@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+supabase
+pydantic>=2
+langgraph
+langchain-openai
+ddgs
