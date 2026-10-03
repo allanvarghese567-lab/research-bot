@@ -114,7 +114,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/research-bot">
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
