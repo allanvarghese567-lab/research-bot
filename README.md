@@ -29,7 +29,9 @@ research-bot/
 │   ├── src/
 │   ├── package.json
 │   └── .env.example
-├── .github/workflows/research-worker.yml
+├── .github/workflows/
+│   ├── research-worker.yml
+│   └── deploy-github-pages.yml
 ├── scripts/test_e2e.py
 └── README.md
 ```
@@ -59,6 +61,9 @@ In the repo **Settings → Secrets and variables → Actions** add:
 | `OPENROUTER_API_KEY` | optional | fallback on 429 |
 | `TAVILY_API_KEY` | optional | better search; falls back to ddgs |
 | `TG_TOKEN` / `TG_CHAT_ID` | optional | Telegram notifications |
+| `VITE_SUPABASE_URL` | for Pages | same as SUPABASE_URL (public) |
+| `VITE_SUPABASE_ANON_KEY` | for Pages | anon key (public) |
+| `VITE_API_URL` | optional | public API base URL if you expose one |
 
 Optional provider overrides: `JUDGE_PROVIDER`, `ANALYST_PROVIDER`, `FALLBACK_PROVIDER`.
 
@@ -91,13 +96,28 @@ npm install
 npm run dev            # http://localhost:5173
 ```
 
+> **Note:** The Vite `base` is set to `/research-bot/` for GitHub Pages. Local `npm run dev` still works; assets are served under that path only in production builds.
+
 ## 4. Triggering the worker
 
 - **Hourly cron** (default)
 - **Manual**: Actions → Research worker → Run workflow
 - **Instant** (via API): frontend calls `POST /requests/{id}/run` which fires a `repository_dispatch` event (`research_request`). Requires a GitHub PAT with `repo` scope in the API env (`GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO`).
 
-## 5. End-to-end test
+## 5. GitHub Pages (frontend)
+
+The React app is deployed automatically via **Deploy GitHub Pages** workflow.
+
+1. Add the `VITE_*` secrets listed above (at minimum `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`).
+2. Go to **Settings → Pages**.
+3. Under **Build and deployment → Source**, choose **GitHub Actions**.
+4. Push to `main` (or run the workflow manually). The site will be available at:
+
+   **https://allanvarghese567-lab.github.io/research-bot/**
+
+SPA client-side routes are handled by copying `index.html` to `404.html` during the build.
+
+## 6. End-to-end test
 
 ```bash
 export SUPABASE_URL=...
