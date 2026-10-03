@@ -7,6 +7,9 @@ import { CalibrationPage } from './pages/Calibration'
 import { LoginPage } from './pages/Login'
 import { useEffect, useState } from 'react'
 
+// Match Vite base: only set basename when deployed to GitHub Pages
+const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
 function ThemeToggle() {
   const [dark, setDark] = useState(() =>
     localStorage.getItem('theme') === 'dark' ||
@@ -114,7 +117,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter basename="/research-bot">
+      <BrowserRouter basename={BASENAME}>
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
