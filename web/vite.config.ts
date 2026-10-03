@@ -4,7 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/research-bot/',
+  // GitHub Pages project site lives at /research-bot/
+  base: process.env.GITHUB_ACTIONS ? '/research-bot/' : '/',
   server: {
     port: 5173,
   },
